@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width">
+        <title>WF App</title>
+    </head>
+    <body>
+        <div id="login" style="width: 100%; height: 100%; margin: 0 auto; text-align: center; position: fixed;">
+            <div id="loginModal" class="modal show" tabindex="-1" role="dialog" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content opacidad">
+                        <div class="modal-header">
+                            <h1 class="text-center"><img style="height: 130px;" src="/images/WFLOGOfull.png"></h1>
+                        </div>
+                        <div class="modal-body">
+                            <div class="form-group">
+                               <input type="text" class="form-control input-lg" name="usuario" id="usr" placeholder="Usuario">
+                            </div>
+                            <div class="form-group">                                 
+                               <input type="password" class="form-control input-lg" name="password" id="pwd" placeholder="Contraseña">
+                            </div>
+                            <div class="form-group">
+                               <button onclick="login();" id="acceso" class="btn btn-primary btn-lg btn-block">Acceso</button>
+                            </div>
+                            <div class="checkbox">
+                               <label><input type="checkbox" value="" checked>Remember me</label>
+                            </div>                 
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div  class="app" id="content" style="margin-top: 4em; text-align: center; display:none">
+            <form method="post" id="formulario" enctype="multipart/form-data">             
+                <input style="display: none;" value="Foto" id="botonazoFotos" onchange="onSuccess();" type="file" name="file">
+                <img id="takePhoto" onclick="hacerFoto();" src="img/camara.png" alt="Foto WF"></input>
+            </form>
+            <br/>
+            <img id="fotoLocal" src="" style="border:0px; margin-top:2em; text-align: center; width:10em;height: 10em;">
+            <img id="fotoServidor" src="" style="text-align: center; width:10em;height: 10em;">
+            <!--<img id="sendPhoto" src="img/enviaImg.png" alt="Envia WF"><br/>   -->
+        </div>       
+        <div id="respuesta"></div>            
+    </body>
+    <script type="text/javascript" src="cordova.js"></script>
+    <script type="text/javascript" src="js/index.js"></script>
+    <script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.12.2.min.js"></script>
+    <script type="text/javascript" src="js/jquery.loader.min.js"></script>
+    <link rel="stylesheet" href="css/jquery.loader.css" />
+    <script type="text/javascript">app.initialize();</script>
+</html>
+<script>
+    function login (){
+        var nombre = $('#usr').val();
+        var passw = $('#pwd').val();
+        $.post( "http://www.alu-wf.com/inicio/login3.php", { nombre:nombre ,passw:passw })
+        .done(function( data ) {
+            if (data==="ok"){
+                alert('Login correcto');
+                $('#login').css('display','none');
+                $('#content').css('display','block');
+            }else{
+                alert('Usuario o contraseña incorrecto');
+            }
+        });
+    }
+    /*function cargaBoton(){        
+        $('#botonazoFotos').trigger('click');
+    }*/
+</script>
+<script type="text/javascript" charset="utf-8">
+    document.addEventListener("deviceready", onDeviceReady, false);
+    function onDeviceReady() {
+        var element = document.getElementById('deviceProperties');
+        element.innerHTML = 'Device Name: '     + device.name     + '<br />' + 
+                            'Device Cordova: '  + device.cordova + '<br />' + 
+                            'Device Platform: ' + device.platform + '<br />' + 
+                            'Device UUID: '     + device.uuid     + '<br />' + 
+                            'Device Version: '  + device.version  + '<br />';
+    }
+    function hacerFoto(){
+        navigator.camera.getPicture(onSuccess, onFail, { quality: 50, destinationType: Camera.DestinationType.FILE_URI });
+    }
+    
+    function onSuccess(imageURI) {
+        var image = document.getElementById('fotoLocal');
+        image.src = imageURI;
+        subirImagen(imageURI)                             
+    }
+
+    function onFail(message) {
+        alert('Failed because: ' + message);
+    }
+    
+     function subirImagen(fileURL) {
+    
+        var options = new FileUploadOptions();
+        options.fileKey = "imagen";
+        options.fileName = fileURL.substr(fileURL.lastIndexOf('/') + 1);
+        var ft = new FileTransfer();
+        $.loader({className:"jquery-loader-background",content: ""});
+        ft.upload(fileURL, encodeURI("http://www.alu-ftth.com/appMovil/subeFoto.php"), uploadSuccess, uploadFail, options);
+    }
+
+    function uploadSuccess(r) {
+        $.loader('close');
+        //alert("Code = " + r.responseCode+" Response = " + r.response+" Sent = " + r.bytesSent);
+        var image = document.getElementById('fotoServidor');
+        image.src = r.response;
+    }
+
+    function uploadFail(error) {
+        $.loader('close');
+        alert("An error has occurred: Code = " + error.code+ " upload error source " + error.source+" upload error target " + error.target);
+    }
+</script>
