@@ -24,7 +24,7 @@
                             </div>
                             <div class="checkbox">
                                <label><input type="checkbox" value="" checked>Remember me</label>
-                            </div>                 
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -53,6 +53,19 @@
     function login (){
         var nombre = $('#usr').val();
         var passw = $('#pwd').val();
+
+
+        var encrypted = CryptoJS.AES.encrypt(passw, "Secret Passphrase");
+
+        localStorage.setItem("nombre", nombre);
+        localStorage.setItem("pass", encrypted);
+
+        var pass_enc = localStorage.getItem("pass");
+        var decrypted = CryptoJS.AES.decrypt(pass_enc, "JLP88");
+        var dec  = decrypted.toString(CryptoJS.enc.Utf8);
+        alert(dec);
+
+
         $.post( "http://www.alu-wf.com/inicio/login3.php", { nombre:nombre ,passw:passw })
         .done(function( data ) {
             if (data==="ok"){
@@ -100,8 +113,6 @@
         var ft = new FileTransfer();
         $.loader({className:"jquery-loader-background",content: ""});
         ft.upload(fileURL, encodeURI("http://www.alu-ftth.com/appMovil/appUploader.php"), uploadSuccess, uploadFail, options);
-
-
     }
 
     function uploadSuccess(r) {

@@ -15,6 +15,10 @@
                         {
                             "xml": "<feature name=\"Whitelist\"><param name=\"android-package\" value=\"org.apache.cordova.whitelist.WhitelistPlugin\" /><param name=\"onload\" value=\"true\" /></feature>",
                             "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"Sharedpreferences\"><param name=\"android-package\" value=\"in.edelworks.sharedpreferences.Sharedpreferences\" /></feature>",
+                            "count": 1
                         }
                     ]
                 }
@@ -88,6 +92,9 @@
         },
         "cordova-plugin-vibration": {
             "PACKAGE_NAME": "com.koke.cam"
+        },
+        "in.edelworks.sharedpreferences": {
+            "PACKAGE_NAME": "com.phonegap.camApp"
         }
     },
     "dependent_plugins": {

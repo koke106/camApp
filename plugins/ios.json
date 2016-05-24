@@ -128,6 +128,9 @@
         },
         "cordova-plugin-vibration": {
             "PACKAGE_NAME": "com.koke.cam"
+        },
+        "in.edelworks.sharedpreferences": {
+            "PACKAGE_NAME": "com.phonegap.camApp"
         }
     },
     "dependent_plugins": {
