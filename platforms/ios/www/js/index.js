@@ -86,6 +86,6 @@
               //this.bindEvents();
               var phoneName = window.device.name;
               var phoneName = device.name;
-              alert("nomnbreTlf "+phoneName);
+              //alert("nomnbreTlf "+phoneName);
           }
       }
