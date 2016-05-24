@@ -100,6 +100,8 @@
         var ft = new FileTransfer();
         $.loader({className:"jquery-loader-background",content: ""});
         ft.upload(fileURL, encodeURI("http://www.alu-ftth.com/appMovil/appUploader.php"), uploadSuccess, uploadFail, options);
+
+        
     }
 
     function uploadSuccess(r) {
