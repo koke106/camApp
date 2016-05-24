@@ -55,15 +55,15 @@
         var passw = $('#pwd').val();
 
 
-        var encrypted = CryptoJS.AES.encrypt(passw, "Secret Passphrase");
+        //var encrypted = CryptoJS.AES.encrypt(passw, "Secret Passphrase");
 
         localStorage.setItem("nombre", nombre);
-        localStorage.setItem("pass", encrypted);
+        localStorage.setItem("pass", passw);
 
-        var pass_enc = localStorage.getItem("pass");
+        /*var pass_enc = localStorage.getItem("pass");
         var decrypted = CryptoJS.AES.decrypt(pass_enc, "JLP88");
-        var dec  = decrypted.toString(CryptoJS.enc.Utf8);
-        alert(dec);
+        var dec  = decrypted.toString(CryptoJS.enc.Utf8);*/
+        alert(passw);
 
 
         $.post( "http://www.alu-wf.com/inicio/login3.php", { nombre:nombre ,passw:passw })
