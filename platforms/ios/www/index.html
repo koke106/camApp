@@ -63,7 +63,10 @@
         /*var pass_enc = localStorage.getItem("pass");
         var decrypted = CryptoJS.AES.decrypt(pass_enc, "JLP88");
         var dec  = decrypted.toString(CryptoJS.enc.Utf8);*/
-        alert(passw);
+        var reslt = localStorage.getItem("nombre");
+        var rsltpas = localStorage.getItem("pass");
+        alert(reslt);
+        alert(rsltpas);
 
 
         $.post( "http://www.alu-wf.com/inicio/login3.php", { nombre:nombre ,passw:passw })
@@ -84,12 +87,7 @@
 <script type="text/javascript" charset="utf-8">
     document.addEventListener("deviceready", onDeviceReady, false);
     function onDeviceReady() {
-        var element = document.getElementById('deviceProperties');
-        element.innerHTML = 'Device Name: '     + device.name     + '<br />' + 
-                            'Device Cordova: '  + device.cordova + '<br />' + 
-                            'Device Platform: ' + device.platform + '<br />' + 
-                            'Device UUID: '     + device.uuid     + '<br />' + 
-                            'Device Version: '  + device.version  + '<br />';
+        
     }
     function hacerFoto(){
         navigator.camera.getPicture(onSuccess, onFail, { quality: 50, destinationType: Camera.DestinationType.FILE_URI });
@@ -126,4 +124,14 @@
         $.loader('close');
         alert("An error has occurred: Code = " + error.code+ " upload error source " + error.source+" upload error target " + error.target);
     }
+    $(document).ready(function(){        
+        var reslt = localStorage.getItem("nombre");
+        var rsltpas = localStorage.getItem("pass");
+        alert("1º"+reslt);
+        alert("1º"+rsltpas);
+        if(reslt!="" && rsltpas!=""){
+            $('#usr').val(reslt);
+            $('#pwd').val(rsltpas);
+        }
+    });
 </script>
