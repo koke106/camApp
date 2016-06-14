@@ -4,7 +4,7 @@
         <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width">
         <title>Sima</title>
     </head>
-    <body style="margin-top:1em; background-color: #DFD7D7; ">
+    <body style="margin-top:1em; background-color: #DFD7D7; font-size:1.1em; font-family: 'Source Sans Pro', Helvetica, sans-serif; ">
         <div id="login" style="width: 100%; height: 100%; margin: 0 auto; text-align: center; position: fixed;">
             <div id="loginModal" class="modal show" tabindex="-1" role="dialog" aria-hidden="true">
                 <div class="modal-dialog">
@@ -104,14 +104,14 @@
         /*alert("comboSeleccionado->"+$('#comboIncidencias').val());
         alert("sincronizamos con "+$('#fotoOculta').val());*/
         var combo =  $('#comboIncidencias').val();
-        if(combo==""){
+        if(combo=="0"){
             alert('Debe relacionarla con una incidencia');
         }else{
             subirImagen($('#fotoOculta').val());
         }
     }
     function onSuccess(imageURI) {
-        $('#fotosLocal').css('displa','block');
+        $('#fotosLocal').css('display','block');
         var image = document.getElementById('fotoLocal');
         image.src = imageURI;
         //subirImagen(imageURI)                             
@@ -143,7 +143,7 @@
     function uploadSuccess(r) {
         $.loader('close');
         if(r.responseCode=='200'){
-            $('#fotosLocal').css('displa','none');
+            $('#fotosLocal').css('display','none');
             $('#fotoLocal').html('');
         }else{
             alert('Algo ha ido mal...');

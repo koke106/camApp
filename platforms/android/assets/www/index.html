@@ -111,7 +111,7 @@
         }
     }
     function onSuccess(imageURI) {
-        $('#fotosLocal').css('displa','block');
+        $('#fotosLocal').css('display','block');
         var image = document.getElementById('fotoLocal');
         image.src = imageURI;
         //subirImagen(imageURI)                             
@@ -143,7 +143,7 @@
     function uploadSuccess(r) {
         $.loader('close');
         if(r.responseCode=='200'){
-            $('#fotosLocal').css('displa','none');
+            $('#fotosLocal').css('display','none');
             $('#fotoLocal').html('');
         }else{
             alert('Algo ha ido mal...');
