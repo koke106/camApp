@@ -65,12 +65,12 @@
         var dec  = decrypted.toString(CryptoJS.enc.Utf8);*/
         var reslt = localStorage.getItem("nombre");
         var rsltpas = localStorage.getItem("pass");
-        alert(reslt);
-        alert(rsltpas);
+        
 
 
-        $.post( "http://www.alu-wf.com/inicio/login3.php", { nombre:nombre ,passw:passw })
+        $.post( "http://www.alu-wf.com/sima/login/login.php", { nombre:nombre ,passw:passw })
         .done(function( data ) {
+            alert(data);
             if (data==="ok"){
                 alert('Login correcto');
                 $('#login').css('display','none');
@@ -127,8 +127,6 @@
     $(document).ready(function(){        
         var reslt = localStorage.getItem("nombre");
         var rsltpas = localStorage.getItem("pass");
-        alert("1º"+reslt);
-        alert("1º"+rsltpas);
         if(reslt!="" && rsltpas!=""){
             $('#usr').val(reslt);
             $('#pwd').val(rsltpas);

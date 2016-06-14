@@ -31,6 +31,7 @@
             </div>
         </div>
         <div  class="app" id="content" style="margin-top: 4em; text-align: center; display:none">
+            <div id="zonaPintaComboIncidencias"></div>
             <form method="post" id="formulario" enctype="multipart/form-data">             
                 <input style="display: none;" value="Foto" id="botonazoFotos" onchange="onSuccess();" type="file" name="file">
                 <img id="takePhoto" onclick="hacerFoto();" src="img/camara.png" alt="Foto WF"></input>
@@ -39,6 +40,8 @@
             <img id="fotoLocal" src="" style="border:0px; margin-top:2em; text-align: center; width:10em;height: 10em;">
             <img id="fotoServidor" src="" style="text-align: center; width:10em;height: 10em;">
             <!--<img id="sendPhoto" src="img/enviaImg.png" alt="Envia WF"><br/>   -->
+            <input type="button" id="botonSincronizar" onclick="sincronizafotos();">
+            <input type="hidden" id="fotoOculta">
         </div>       
         <div id="respuesta"></div>            
     </body>
@@ -65,13 +68,20 @@
         var dec  = decrypted.toString(CryptoJS.enc.Utf8);*/
         var reslt = localStorage.getItem("nombre");
         var rsltpas = localStorage.getItem("pass");
-        alert(reslt);
-        alert(rsltpas);
+        
 
 
-        $.post( "http://www.alu-wf.com/inicio/login3.php", { nombre:nombre ,passw:passw })
+        $.post( "http://www.alu-wf.com/sima/login/login.php", { nombre:nombre ,passw:passw })
         .done(function( data ) {
+            alert(data);
             if (data==="ok"){
+                //Pedimos ahora el combo:
+                $.post( "http://www.alu-wf.com/sima/login/dameComboIncidencias.php")
+                    .done(function( data ) {
+                        alert(data);
+                        $('#zonaPintaComboIncidencias').html('');
+                        $('#zonaPintaComboIncidencias').html(data);
+                    });
                 alert('Login correcto');
                 $('#login').css('display','none');
                 $('#content').css('display','block');
@@ -92,11 +102,16 @@
     function hacerFoto(){
         navigator.camera.getPicture(onSuccess, onFail, { quality: 50, destinationType: Camera.DestinationType.FILE_URI });
     }
-    
+    function sincronizafotos(){
+        alert("sincronizamos con "+$('#fotoOculta').val());
+    }
     function onSuccess(imageURI) {
         var image = document.getElementById('fotoLocal');
         image.src = imageURI;
-        subirImagen(imageURI)                             
+        //subirImagen(imageURI)                             
+        //Mostramos boton para poder subirla:
+        $('#botonSincronizar').css('display','block');
+        $('#fotoOculta').val(imageURI);
     }
 
     function onFail(message) {
@@ -127,8 +142,6 @@
     $(document).ready(function(){        
         var reslt = localStorage.getItem("nombre");
         var rsltpas = localStorage.getItem("pass");
-        alert("1º"+reslt);
-        alert("1º"+rsltpas);
         if(reslt!="" && rsltpas!=""){
             $('#usr').val(reslt);
             $('#pwd').val(rsltpas);
