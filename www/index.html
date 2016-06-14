@@ -126,12 +126,13 @@
     }
     
      function subirImagen(fileURL) {
-    
+        
+        var combo = $('#comboIncidencias').val();
         var options = new FileUploadOptions();
         options.fileKey = "imagen";
         options.fileName = fileURL.substr(fileURL.lastIndexOf('/') + 1);
         var params = {};
-        params.idinc = $('#comboIncidencias').val();
+        params.idinc = combo;
         options.params = params;
         var ft = new FileTransfer();
         $.loader({className:"jquery-loader-background",content: ""});
