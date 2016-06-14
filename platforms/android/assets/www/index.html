@@ -2,9 +2,9 @@
 <html>
     <head>
         <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width">
-        <title>WF App</title>
+        <title>Sima</title>
     </head>
-    <body>
+    <body style="margin-top:1em; background-color: #DFD7D7; font-size:1.1em; font-family: 'Source Sans Pro', Helvetica, sans-serif; ">
         <div id="login" style="width: 100%; height: 100%; margin: 0 auto; text-align: center; position: fixed;">
             <div id="loginModal" class="modal show" tabindex="-1" role="dialog" aria-hidden="true">
                 <div class="modal-dialog">
@@ -14,16 +14,13 @@
                         </div>
                         <div class="modal-body">
                             <div class="form-group">
-                               <input type="text" class="form-control input-lg" name="usuario" id="usr" placeholder="Usuario">
+                               <input type="text" class="form-control input-lg" name="usuario" id="usr" placeholder="Usuario" style="margin: 0 auto;text-align: center;  background: transparent;border-radius: 4px; border: 0; box-shadow: inset 0 0 0 2px #36c; color: #36c; font-size: 1.5em; font-weight: 700;    letter-spacing: 0.05em; height: 1.5em; line-height: 3.45em; overflow: hidden; text-decoration: none;">
                             </div>
                             <div class="form-group">                                 
-                               <input type="password" class="form-control input-lg" name="password" id="pwd" placeholder="Contraseña">
+                               <input type="password" class="form-control input-lg" name="password" id="pwd" placeholder="Contrase&ntilde;a" style="margin-top:0.4em; auto;text-align: center;  background: transparent;border-radius: 4px; border: 0; box-shadow: inset 0 0 0 2px #36c; color: #36c; font-size: 1.5em; font-weight: 700;    letter-spacing: 0.05em; height: 1.5em; line-height: 3.45em; overflow: hidden; text-decoration: none;">
                             </div>
                             <div class="form-group">
-                               <button onclick="login();" id="acceso" class="btn btn-primary btn-lg btn-block" style=" position:relative; margin:0 auto; margin-left:35%; text-align:center; background-color:transparent; border-radius: 4px; border:0; box-shadow: inset 0 0 0 2px #36c; color:#36c !important; font-size: 1em; font-weight: 600; letter-spacing: 0.15em; height: 3.5em; line-height: 3.45em; overflow: hidden; text-decoration: none; text-transform: uppercase;">Acceso</button>
-                            </div>
-                            <div class="checkbox">
-                               <label><input type="checkbox" value="" checked>Remember me</label>
+                               <button onclick="login();" id="acceso" class="btn btn-primary btn-lg btn-block" style="margin-top: 1em; position:relative; text-align:center; background-color:transparent; border-radius: 4px; border:0; box-shadow: inset 0 0 0 2px #36c; color:#36c !important; font-size: 1em; font-weight: 600; letter-spacing: 0.15em; height: 3.5em; line-height: 3.45em; overflow: hidden; text-decoration: none; text-transform: uppercase;">Entrar</button>
                             </div>
                         </div>
                     </div>
@@ -41,10 +38,11 @@
             <div id="fotosLocal" style="display:none;">
                 <img id="fotoLocal" src="" style="border:0px; margin-top:2em; text-align: center; width:10em;height: 10em;">
             </div>
-           
-            <!--<img id="sendPhoto" src="img/enviaImg.png" alt="Envia WF"><br/>   -->
-            <input type="button" id="botonSincronizar" value="Sincronizar" name="Sincronizar" style="display:none; position:relative; margin:0 auto; margin-left:35%; text-align:center; background-color:transparent; border-radius: 4px; border:0; box-shadow: inset 0 0 0 2px #36c; color:#36c !important; font-size: 1em; font-weight: 600; letter-spacing: 0.15em; height: 3.5em; line-height: 3.45em; overflow: hidden; text-decoration: none; text-transform: uppercase;" onclick="sincronizafotos();">
-            <input type="hidden" id="fotoOculta">
+           <div class="form-group">
+                <!--<img id="sendPhoto" src="img/enviaImg.png" alt="Envia WF"><br/>   -->
+                <input type="button" id="botonSincronizar" value="Sincronizar" name="Sincronizar" style="display:none; position:relative; margin:0 auto; text-align:center; background-color:transparent; border-radius: 4px; border:0; box-shadow: inset 0 0 0 2px #36c; color:#36c !important; font-size: 1em; font-weight: 600; letter-spacing: 0.15em; height: 3.5em; line-height: 3.45em; overflow: hidden; text-decoration: none; text-transform: uppercase;" onclick="sincronizafotos();">
+                <input type="hidden" id="fotoOculta">
+            </div>
         </div>       
         <div id="respuesta"></div>            
     </body>
@@ -106,7 +104,7 @@
         /*alert("comboSeleccionado->"+$('#comboIncidencias').val());
         alert("sincronizamos con "+$('#fotoOculta').val());*/
         var combo =  $('#comboIncidencias').val();
-        if(combo==""){
+        if(combo=="0"){
             alert('Debe relacionarla con una incidencia');
         }else{
             subirImagen($('#fotoOculta').val());
@@ -135,6 +133,7 @@
         var params = {};
         params.idinc = combo;
         params.userFile = 'imagen';
+        params.userName = $('#usr').val();
         options.params = params;
         var ft = new FileTransfer();
         $.loader({className:"jquery-loader-background",content: ""});

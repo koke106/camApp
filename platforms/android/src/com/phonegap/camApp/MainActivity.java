@@ -17,7 +17,7 @@
        under the License.
  */
 
-package com.koke.cam;
+package com.phonegap.camApp;
 
 import android.os.Bundle;
 import org.apache.cordova.*;
