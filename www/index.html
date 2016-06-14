@@ -103,8 +103,14 @@
         navigator.camera.getPicture(onSuccess, onFail, { quality: 50, destinationType: Camera.DestinationType.FILE_URI });
     }
     function sincronizafotos(){
+        alert("comboSeleccionado->"+$('#comboIncidencias').val());
         alert("sincronizamos con "+$('#fotoOculta').val());
-        subirImagen($('#fotoOculta').val());
+        var combo =  $('#comboIncidencias').val();
+        if(combo==""){
+            alert('Debe relacionarla con una incidencia');
+        }else{
+            subirImagen($('#fotoOculta').val());
+        }
     }
     function onSuccess(imageURI) {
         var image = document.getElementById('fotoLocal');
@@ -124,9 +130,12 @@
         var options = new FileUploadOptions();
         options.fileKey = "imagen";
         options.fileName = fileURL.substr(fileURL.lastIndexOf('/') + 1);
+        var params = {};
+        params.idinc = $('#comboIncidencias').val();
+        options.params = params;
         var ft = new FileTransfer();
         $.loader({className:"jquery-loader-background",content: ""});
-        ft.upload(fileURL, encodeURI("http://www.alu-ftth.com/appMovil/appUploader.php"), uploadSuccess, uploadFail, options);
+        ft.upload(fileURL, encodeURI("http://www.alu-ftth.com/sima/app_backend/appUploader.php"), uploadSuccess, uploadFail, options);
     }
 
     function uploadSuccess(r) {
