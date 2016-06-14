@@ -20,7 +20,7 @@
                                <input type="password" class="form-control input-lg" name="password" id="pwd" placeholder="Contraseña">
                             </div>
                             <div class="form-group">
-                               <button onclick="login();" id="acceso" class="btn btn-primary btn-lg btn-block">Acceso</button>
+                               <button onclick="login();" id="acceso" class="btn btn-primary btn-lg btn-block" style="display:none; position:relative; margin:0 auto; margin-left:35%; text-align:center; background-color:transparent; border-radius: 4px; border:0; box-shadow: inset 0 0 0 2px #36c; color:#36c !important; font-size: 1em; font-weight: 600; letter-spacing: 0.15em; height: 3.5em; line-height: 3.45em; overflow: hidden; text-decoration: none; text-transform: uppercase;">Acceso</button>
                             </div>
                             <div class="checkbox">
                                <label><input type="checkbox" value="" checked>Remember me</label>
@@ -31,16 +31,19 @@
             </div>
         </div>
         <div  class="app" id="content" style="margin-top: 4em; text-align: center; display:none">
-            <div id="zonaPintaComboIncidencias"></div>
+            <span>SELECTOR INCIDENCIAS:</span>
+            <div style="margin:0 auto; padding-bottom:2em;" id="zonaPintaComboIncidencias"></div>
             <form method="post" id="formulario" enctype="multipart/form-data">             
                 <input style="display: none;" value="Foto" id="botonazoFotos" onchange="onSuccess();" type="file" name="file">
                 <img id="takePhoto" onclick="hacerFoto();" src="img/camara.png" alt="Foto WF"></input>
             </form>
             <br/>
-            <img id="fotoLocal" src="" style="border:0px; margin-top:2em; text-align: center; width:10em;height: 10em;">
-            <img id="fotoServidor" src="" style="text-align: center; width:10em;height: 10em;">
+            <div id="fotosLocal" style="display:none;">
+                <img id="fotoLocal" src="" style="border:0px; margin-top:2em; text-align: center; width:10em;height: 10em;">
+            </div>
+           
             <!--<img id="sendPhoto" src="img/enviaImg.png" alt="Envia WF"><br/>   -->
-            <input type="button" id="botonSincronizar" value="Sincronizar" name="Sincronizar" style="display:none;" onclick="sincronizafotos();">
+            <input type="button" id="botonSincronizar" value="Sincronizar" name="Sincronizar" style="display:none; position:relative; margin:0 auto; margin-left:35%; text-align:center; background-color:transparent; border-radius: 4px; border:0; box-shadow: inset 0 0 0 2px #36c; color:#36c !important; font-size: 1em; font-weight: 600; letter-spacing: 0.15em; height: 3.5em; line-height: 3.45em; overflow: hidden; text-decoration: none; text-transform: uppercase;" onclick="sincronizafotos();">
             <input type="hidden" id="fotoOculta">
         </div>       
         <div id="respuesta"></div>            
@@ -73,16 +76,16 @@
 
         $.post( "http://www.alu-wf.com/sima/login/login.php", { nombre:nombre ,passw:passw })
         .done(function( data ) {
-            alert('PRIMERO:'+data);
+            //alert('PRIMERO:'+data);
             if (data==="ok"){
                 //Pedimos ahora el combo:
                 $.post( "http://www.alu-wf.com/sima/login/dameComboIncidencias.php", { nombre:nombre ,passw:passw })
                     .done(function( data ) {
-                        alert('segundo:'+data);
+                        //alert('segundo:'+data);
                         $('#zonaPintaComboIncidencias').html('');
                         $('#zonaPintaComboIncidencias').html(data);
                     });
-                alert('Login correcto');
+                //alert('Login correcto');
                 $('#login').css('display','none');
                 $('#content').css('display','block');
             }else{
@@ -90,9 +93,6 @@
             }
         });
     }
-    /*function cargaBoton(){        
-        $('#botonazoFotos').trigger('click');
-    }*/
 </script>
 <script type="text/javascript" charset="utf-8">
     document.addEventListener("deviceready", onDeviceReady, false);
@@ -103,8 +103,8 @@
         navigator.camera.getPicture(onSuccess, onFail, { quality: 50, destinationType: Camera.DestinationType.FILE_URI });
     }
     function sincronizafotos(){
-        alert("comboSeleccionado->"+$('#comboIncidencias').val());
-        alert("sincronizamos con "+$('#fotoOculta').val());
+        /*alert("comboSeleccionado->"+$('#comboIncidencias').val());
+        alert("sincronizamos con "+$('#fotoOculta').val());*/
         var combo =  $('#comboIncidencias').val();
         if(combo==""){
             alert('Debe relacionarla con una incidencia');
@@ -113,6 +113,7 @@
         }
     }
     function onSuccess(imageURI) {
+        $('#fotosLocal').css('displa','block');
         var image = document.getElementById('fotoLocal');
         image.src = imageURI;
         //subirImagen(imageURI)                             
@@ -122,7 +123,7 @@
     }
 
     function onFail(message) {
-        alert('Failed because: ' + message);
+        alert('Error: ' + message);
     }
     
      function subirImagen(fileURL) {
@@ -133,6 +134,7 @@
         options.fileName = fileURL.substr(fileURL.lastIndexOf('/') + 1);
         var params = {};
         params.idinc = combo;
+        params.userFile = 'imagen';
         options.params = params;
         var ft = new FileTransfer();
         $.loader({className:"jquery-loader-background",content: ""});
@@ -141,14 +143,20 @@
 
     function uploadSuccess(r) {
         $.loader('close');
-        alert("Code = " + r.responseCode+" Response = " + r.response+" Sent = " + r.bytesSent);
-        var image = document.getElementById('fotoServidor');
-        image.src = r.response;
+        if(r.responseCode=='200'){
+            $('#fotosLocal').css('displa','none');
+            $('#fotoLocal').html('');
+        }else{
+            alert('Algo ha ido mal...');
+        }
+        //alert("Code = " + r.responseCode+" Response = " + r.response+" Sent = " + r.bytesSent);
+        /*var image = document.getElementById('fotoServidor');
+        image.src = r.response;*/
     }
 
     function uploadFail(error) {
         $.loader('close');
-        alert("An error has occurred: Code = " + error.code+ " upload error source " + error.source+" upload error target " + error.target);
+        alert("Error: Code = " + error.code+ " upload error source " + error.source+" upload error target " + error.target);
     }
     $(document).ready(function(){        
         var reslt = localStorage.getItem("nombre");
