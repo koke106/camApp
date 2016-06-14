@@ -145,8 +145,8 @@
         if(r.responseCode=='200'){
             $('#fotosLocal').css('display','none');
             $('#botonSincronizar').css('display','none');
-
             $('#fotoLocal').html('');
+            alert('Foto subida correctamente, relacionada con la incidencia:'+$('#comboIncidencias').val());
         }else{
             alert('Algo ha ido mal...');
         }
