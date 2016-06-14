@@ -141,7 +141,7 @@
 
     function uploadSuccess(r) {
         $.loader('close');
-        //alert("Code = " + r.responseCode+" Response = " + r.response+" Sent = " + r.bytesSent);
+        alert("Code = " + r.responseCode+" Response = " + r.response+" Sent = " + r.bytesSent);
         var image = document.getElementById('fotoServidor');
         image.src = r.response;
     }
