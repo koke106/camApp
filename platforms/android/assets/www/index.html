@@ -73,12 +73,12 @@
 
         $.post( "http://www.alu-wf.com/sima/login/login.php", { nombre:nombre ,passw:passw })
         .done(function( data ) {
-            alert(data);
+            alert('PRIMERO:'+data);
             if (data==="ok"){
                 //Pedimos ahora el combo:
-                $.post( "http://www.alu-wf.com/sima/login/dameComboIncidencias.php")
+                $.post( "http://www.alu-wf.com/sima/login/dameComboIncidencias.php", { nombre:nombre ,passw:passw })
                     .done(function( data ) {
-                        alert(data);
+                        alert('segundo:'+data);
                         $('#zonaPintaComboIncidencias').html('');
                         $('#zonaPintaComboIncidencias').html(data);
                     });
@@ -104,6 +104,7 @@
     }
     function sincronizafotos(){
         alert("sincronizamos con "+$('#fotoOculta').val());
+        subirImagen($('#fotoOculta').val());
     }
     function onSuccess(imageURI) {
         var image = document.getElementById('fotoLocal');
