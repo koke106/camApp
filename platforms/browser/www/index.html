@@ -2,7 +2,7 @@
 <html>
     <head>
         <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width">
-        <title>Sima</title>
+        <title>SIMA</title>
     </head>
     <body style="margin-top:1em; background-color:#C4C2D7; font-size:1.1em; font-family: 'Source Sans Pro', Helvetica, sans-serif; ">
         <div id="login" style="width: 100%; height: 100%; margin: 0 auto; text-align: center; position: fixed;">
@@ -14,10 +14,10 @@
                         </div>
                         <div class="modal-body">
                             <div class="form-group">
-                               <input type="text" class="form-control input-lg" name="usuario" id="usr" placeholder="Usuario" style="margin: 0 auto;text-align: center;  background: transparent;border-radius: 4px; border: 0; box-shadow: inset 0 0 0 2px #36c; color: #36c; font-size: 1.5em;  overflow: hidden; text-decoration: none;">
+                               <input type="text" class="form-control input-lg" name="usuario" id="usr" placeholder="Usuario" style="margin: 0 auto;text-align: center;  background: transparent;border-radius: 4px; border: 0; box-shadow: inset 0 0 0 2px #36c; color: #36c; font-size: 1.5em;  overflow: hidden; text-decoration: none; width: 9em;">
                             </div>
                             <div class="form-group">                                 
-                               <input type="password" class="form-control input-lg" name="password" id="pwd" placeholder="Contrase&ntilde;a" style="margin-top:0.4em; text-align: center;  background: transparent; border-radius: 4px; border: 0; box-shadow: inset 0 0 0 2px #36c; color: #36c; font-size: 1.5em; overflow: hidden; text-decoration: none;">
+                               <input type="password" class="form-control input-lg" name="password" id="pwd" placeholder="Contrase&ntilde;a" style="margin-top:0.4em; text-align: center;  background: transparent; border-radius: 4px; border: 0; box-shadow: inset 0 0 0 2px #36c; color: #36c; font-size: 1.5em; overflow: hidden; text-decoration: none;width: 9em;">
                             </div>
                             <div class="form-group">
                                <button onclick="login();" id="acceso" class="btn btn-primary btn-lg btn-block" style="margin-top: 1em; position:relative; text-align:center; background-color:transparent; border-radius: 4px; border:0; box-shadow: inset 0 0 0 2px #36c; color:#36c !important; font-size: 1em; font-weight: 600; letter-spacing: 0.15em; height: 3.5em; line-height: 3.45em; overflow: hidden; text-decoration: none; text-transform: uppercase;">Entrar</button>
@@ -27,25 +27,33 @@
                 </div>
             </div>
         </div>
-        <div  class="app" id="content" style="margin-top: 4em; text-align: center; display:none">
+        <div  class="app" id="content" style="margin-top: 2em; text-align: center; display:none">
             <span>SELECTOR INCIDENCIAS:</span>
-            <div style="margin:0 auto; padding-bottom:2em;" id="zonaPintaComboIncidencias"></div>
-            <form method="post" id="formulario" enctype="multipart/form-data">             
+            <div style="margin:0 auto; padding-bottom:0.5em;" id="zonaPintaComboIncidencias"></div>
+            <div style="margin:0 auto; padding-bottom:0.5em;" id="primero"></div>
+            <div style="margin:0 auto; padding-bottom:0.5em;" id="segundo"></div>
+            <div style="margin:0 auto; padding-bottom:1em;" id="tercero"></div>
+            <form method="post" id="formulario" enctype="multipart/form-data" style="display:none;">             
                 <input style="display: none;" value="Foto" id="botonazoFotos" onchange="onSuccess();" type="file" name="file">
                 <img id="takePhoto" onclick="hacerFoto();" src="img/camara.png" alt="Foto WF"></input>
             </form>
             <br/>
-            <div id="fotosLocal" style="display:none;">
-                <img id="fotoLocal" src="" style="border:0px; margin-top:2em; text-align: center; width:20em; height: 20em;">
+            <div id="muestraFotos" style="display:none;">
+                <!--<img src="" style="border:1px solid black; margin-top:2em; text-align: center; width:5em; height: 5em;" id='pintafotos'>
+                <img src="" style="border:1px solid black; margin-top:2em; text-align: center; width:5em; height: 5em;" id='pintafotosSegunda'>
+                <img src="" style="border:1px solid black; margin-top:2em; text-align: center; width:5em; height: 5em;" id='pintafotosTercera'>-->
             </div>
-           <div class="form-group">
+            <div id="botonazoSinc" style="display:none;">
                 <!--<img id="sendPhoto" src="img/enviaImg.png" alt="Envia WF"><br/>   -->
                 <input type="button" id="botonSincronizar" value="Sincronizar" name="Sincronizar" style="display:none; position:relative; margin:0 auto; text-align:center; background-color:transparent; border-radius: 4px; border:0; box-shadow: inset 0 0 0 2px #36c; color:#36c !important; font-size: 1em; font-weight: 600; letter-spacing: 0.15em; height: 3.5em; line-height: 3.45em; overflow: hidden; text-decoration: none; text-transform: uppercase;" onclick="sincronizafotos();">
-                <input type="hidden" id="fotoOculta">
+                 
             </div>
         </div>       
-        <div id="respuesta"></div>            
+        <div id="respuesta"></div>    
+
     </body>
+    <input type="hidden" id="contadorOcultoFotos" value="0">
+    <input type="hidden" id="contadorTmpOculto" value="0">
     <script type="text/javascript" src="cordova.js"></script>
     <script type="text/javascript" src="js/index.js"></script>
     <script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.12.2.min.js"></script>
@@ -77,11 +85,12 @@
             //alert('PRIMERO:'+data);
             if (data==="ok"){
                 //Pedimos ahora el combo:
-                $.post( "http://www.alu-wf.com/sima/login/dameComboIncidencias.php", { nombre:nombre ,passw:passw })
+                $.post( "http://www.alu-wf.com/sima/login/dameComboIncidencias.php", { zona:'0'})
                     .done(function( data ) {
                         //alert('segundo:'+data);
                         $('#zonaPintaComboIncidencias').html('');
-                        $('#zonaPintaComboIncidencias').html(data);
+                        $('#primero').html('');
+                        $('#primero').html(data);
                     });
                 //alert('Login correcto');
                 $('#login').css('display','none');
@@ -94,11 +103,12 @@
 </script>
 <script type="text/javascript" charset="utf-8">
     document.addEventListener("deviceready", onDeviceReady, false);
+    var arrayFotos = new Array();
     function onDeviceReady() {
         
     }
     function hacerFoto(){
-        navigator.camera.getPicture(onSuccess, onFail, { quality: 50, destinationType: Camera.DestinationType.FILE_URI });
+        navigator.camera.getPicture(onSuccess, onFail, { quality: 35, allowEdit: true, destinationType: Camera.DestinationType.FILE_URI });
     }
     function sincronizafotos(){
         /*alert("comboSeleccionado->"+$('#comboIncidencias').val());
@@ -107,48 +117,92 @@
         if(combo=="0"){
             alert('Debe relacionarla con una incidencia');
         }else{
-            subirImagen($('#fotoOculta').val());
+            $.loader({className:"jquery-loader-background",content: ""});
+            subirImagen();
         }
     }
     function onSuccess(imageURI) {
-        $('#fotosLocal').css('display','block');
-        var image = document.getElementById('fotoLocal');
+
+        var contador = $('#contadorOcultoFotos').val();        
+        $('#muestraFotos').css('display','block');
+        $('#botonSincronizar').css('display','block');
+        $('#botonazoSinc').css('display','block');
+        $('#muestraFotos').append('<img src="" style="border:1px solid black; margin-top:2em; text-align: center; width:5em; height: 5em;" id="pintafotos_'+contador+'">')
+        $('#contadorOcultoFotos').val(contador);      
+        var image = document.getElementById('pintafotos_'+contador);
         image.src = imageURI;
+        $('#pintafotos_'+contador).val(imageURI);
+        contador++;
+        $('#contadorOcultoFotos').val(contador);   
         //subirImagen(imageURI)                             
         //Mostramos boton para poder subirla:
-        $('#botonSincronizar').css('display','block');
-        $('#fotoOculta').val(imageURI);
     }
 
     function onFail(message) {
         alert('Error: ' + message);
     }
     
-     function subirImagen(fileURL) {
-        
-        var combo = $('#comboIncidencias').val();
-        var options = new FileUploadOptions();
-        options.fileKey = "imagen";
-        options.fileName = fileURL.substr(fileURL.lastIndexOf('/') + 1);
-        var params = {};
-        params.idinc = combo;
-        params.userFile = 'imagen';
-        params.userName = $('#usr').val();
-        options.params = params;
-        var ft = new FileTransfer();
-        $.loader({className:"jquery-loader-background",content: ""});
-        ft.upload(fileURL, encodeURI("http://www.alu-wf.com/sima/app_backend/appUploader.php"), uploadSuccess, uploadFail, options);
+     function subirImagen() {
+        var contador = $('#contadorTmpOculto').val();
+        //alert('abro SubirImagen con valor: '+contador+' y en la variable tengo:'+$('#contadorOcultoFotos').val()+' en el tmp tengo: '+$('#contadorTmpOculto').val());
+
+        if(contador=='0'){
+            //alert('1-SUBE FOTO: '+contador+' RUTA: '+$('#pintafotos_'+contador).val());
+            fileURL = $('#pintafotos_'+contador).val();
+            var combo = $('#comboIncidencias').val();
+            var options = new FileUploadOptions();
+            options.fileKey = "imagen";
+            options.fileName = fileURL.substr(fileURL.lastIndexOf('/') + 1);
+            var params = {};
+            params.idinc = combo;
+            params.userFile = 'imagen';
+            params.userName = $('#usr').val();
+            options.params = params;
+            var ft = new FileTransfer();
+            contador++;
+            $('#contadorTmpOculto').val(contador);
+            ft.upload(fileURL, encodeURI("http://www.alu-wf.com/sima/app_backend/appUploader.php"), uploadSuccess, uploadFail, options);
+        }else{
+            var tmp = $('#contadorOcultoFotos').val(); 
+            if (tmp>contador){
+                //alert('2-SUBE FOTO: '+contador+' RUTA: '+$('#pintafotos_'+contador).val());
+                fileURL = $('#pintafotos_'+contador).val();
+                var combo = $('#comboIncidencias').val();
+                var options = new FileUploadOptions();
+                options.fileKey = "imagen";
+                options.fileName = fileURL.substr(fileURL.lastIndexOf('/') + 1);
+                var params = {};
+                params.idinc = combo;
+                params.userFile = 'imagen';
+                params.userName = $('#usr').val();
+                options.params = params;
+                var ft = new FileTransfer();
+                contador++;
+                $('#contadorTmpOculto').val(contador);
+                ft.upload(fileURL, encodeURI("http://www.alu-wf.com/sima/app_backend/appUploader.php"), uploadSuccess, uploadFail, options);
+            }else{
+                $('#muestraFotos').css('display','none');
+                $('#muestraFotos').html('');
+                $('#contadorOcultoFotos').val('0'); 
+                $('#contadorTmpOculto').val('0');
+                $('#botonazoSinc').css('display','none');
+                $('#botonSincronizar').css('display','none');
+                alert('Sincronizacion correcta');
+                $.loader('close');
+            }
+        }
     }
 
-    function uploadSuccess(r) {
-        $.loader('close');
+    function uploadSuccess(r) {        
         if(r.responseCode=='200'){
-            $('#fotosLocal').css('display','none');
-            $('#botonSincronizar').css('display','none');
-            $('#fotoLocal').html('');
-            alert('Foto subida correctamente, relacionada con la incidencia:'+$('#comboIncidencias').val());
+            var tmp = $('#contadorTmpOculto').val();
+            tmp--;
+            var image = document.getElementById('pintafotos_'+tmp);
+            image.src = 'img/tick.png';
+            subirImagen();            
         }else{
-            alert('Algo ha ido mal...');
+            alert('Error al subir la foto, comprueba tu conexión.');
+            $.loader('close');
         }
         //alert("Code = " + r.responseCode+" Response = " + r.response+" Sent = " + r.bytesSent);
         /*var image = document.getElementById('fotoServidor');
@@ -157,7 +211,7 @@
 
     function uploadFail(error) {
         $.loader('close');
-        alert("Error: Code = " + error.code+ " upload error source " + error.source+" upload error target " + error.target);
+        alert('Error al subir la foto, comprueba tu conexión.');
     }
     $(document).ready(function(){        
         var reslt = localStorage.getItem("nombre");
@@ -167,4 +221,43 @@
             $('#pwd').val(rsltpas);
         }
     });
+
+    function abreSegundo(){
+        $('#segundo').html('');
+        $('#tercero').html('');
+        $('#formulario').css('display','none');
+        $.loader({className:"jquery-loader-background",content: ""});
+        var cliente = $('#comboIncidenciasPrimero').val();
+        $.post( "http://www.alu-wf.com/sima/login/dameComboIncidencias.php", { zona:'1', cliente:cliente})
+            .done(function( data ) {
+            //alert('segundo:'+data);
+            $('#comboIncidencias').val('');
+            $('#segundo').append(data);
+            $.loader('close');            
+        });
+    }
+    function abreDef(){
+        $('#tercero').html('');       
+        $('#formulario').css('display','none');
+        $.loader({className:"jquery-loader-background",content: ""});
+        var codigoSite = $('#comboIncidenciasSegundo').val();
+        $.post( "http://www.alu-wf.com/sima/login/dameComboIncidencias.php", { zona:'2' , codigoSite:codigoSite})
+            .done(function( data ) {
+            //alert('segundo:'+data);
+            $('#tercero').append(data);
+            $.loader('close');
+        });
+    }
+    function dameBoton(){
+        $('#formulario').css('display','none');
+        var valor= $('#comboIncidencias').val();
+        if (valor=='0' || valor==""){
+            $('#formulario').css('display','none');
+        }else{
+            $('#formulario').css('display','block');
+        }
+    }
+    
+
+    
 </script>
